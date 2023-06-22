@@ -11,7 +11,13 @@ Author: Justin Mathieu
 
 ## **Tests**
 
+Lab 26
+
 - No Tests yet.
+
+Lab 27
+
+- Still need to work on testing, But got a few to pass.
 
 ## **Links**
 
@@ -19,5 +25,10 @@ Author: Justin Mathieu
 
 ## **UML**
 
-Lab 26:
+### Lab 26
+
 ![UML Lab 26](./assets/LAB-26-UML.png)
+
+### Lab 27
+
+![UML Lab 27](./assets/LAB-27.png)

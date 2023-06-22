@@ -1,4 +1,8 @@
 @import "/src/App.scss";
 section{
     background:darken($backgroundColor, 25);
+
+    div{
+        background-color: red;
+    }
 }
