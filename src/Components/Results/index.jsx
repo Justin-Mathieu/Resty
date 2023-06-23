@@ -1,5 +1,9 @@
 import React from 'react';
+import JSONPretty from 'react-json-pretty';
+import JSONPretty1337 from'react-json-pretty/dist/acai';
+
 import './Results.scss';
+
 function Results(props){
   let {data } = props;
   return (
@@ -7,7 +11,9 @@ function Results(props){
         
          {props.loadMessage?
         <div >Please Wait...</div>:
-        <pre>{data ? JSON.stringify(data, undefined, 2) : null}</pre>}
+        
+        <pre>
+          <JSONPretty data={data} theme={JSONPretty1337}></JSONPretty></pre>}
       </section>
     );
 }

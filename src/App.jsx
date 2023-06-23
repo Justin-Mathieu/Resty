@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.scss';
+import axios from 'axios';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Form from './Components/Form';
 import Results from './Components/Results';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 
 function App(){
@@ -12,9 +13,23 @@ let [data, setData] = useState(null);
  let [requestParams, setParams] = useState({})
  let [loadMessage, setLoadMessage] = useState(false)
 
+ useEffect(()=>{
+  console.log('---------UseEffect---------');
+  async function getRequestedData(){
+    let response = await axios.get(requestParams.url)
+    setData(response.data)
+  }
+  if(requestParams.url && requestParams.method ){
+       setLoadMessage(true);
+       setTimeout(()=>{
+           getRequestedData();
+    setLoadMessage(false);
+       }, 1000);
+  }
+ }, [requestParams])
+
+
  const callApi = (requestParams) => {
-    setLoadMessage(true);
-    setTimeout(()=>{
 const data = {
       count: 2,
       results: [
@@ -24,8 +39,8 @@ const data = {
     }
     setData(data);
     setParams(requestParams);
-    setLoadMessage(false);
-  }, 2000)
+    
+
   
   }
     return (
