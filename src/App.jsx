@@ -9,39 +9,34 @@ import {useState, useEffect} from 'react';
 
 
 function App(){
+
+// State
 let [data, setData] = useState(null);
  let [requestParams, setParams] = useState({})
  let [loadMessage, setLoadMessage] = useState(false)
 
+// UseEffect
  useEffect(()=>{
-  console.log('---------UseEffect---------');
-  async function getRequestedData(){
+  try{
+     if(requestParams.url && requestParams.method ){
+setLoadMessage(true);
+ async function getRequestedData(){
     let response = await axios.get(requestParams.url)
     setData(response.data)
   }
-  if(requestParams.url && requestParams.method ){
-       setLoadMessage(true);
-       setTimeout(()=>{
-           getRequestedData();
-    setLoadMessage(false);
-       }, 1000);
+  getRequestedData();
+  setLoadMessage(false);
   }
- }, [requestParams])
+}
+catch{setData('Error No Data');}
+}, [requestParams])
 
-
+// Onsubmit handler
  const callApi = (requestParams) => {
-const data = {
-      count: 2,
-      results: [
-        {name: 'fake thing 1', url: 'http://fakethings.com/1'},
-        {name: 'fake thing 2', url: 'http://fakethings.com/2'},
-      ],
-    }
     setData(data);
     setParams(requestParams);
     
-
-  
+// Rendering Components   
   }
     return (
       <React.Fragment>
