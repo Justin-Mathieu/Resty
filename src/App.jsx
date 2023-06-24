@@ -1,32 +1,42 @@
 import React from 'react';
 import './App.scss';
+import axios from 'axios';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Form from './Components/Form';
 import Results from './Components/Results';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 
 function App(){
+
+// State
 let [data, setData] = useState(null);
  let [requestParams, setParams] = useState({})
  let [loadMessage, setLoadMessage] = useState(false)
 
+// UseEffect
+ useEffect(()=>{
+  try{
+     if(requestParams.url && requestParams.method ){
+setLoadMessage(true);
+ async function getRequestedData(){
+    let response = await axios.get(requestParams.url)
+    setData(response.data)
+  }
+  getRequestedData();
+  setLoadMessage(false);
+  }
+}
+catch{setData('Error No Data');}
+}, [requestParams])
+
+// Onsubmit handler
  const callApi = (requestParams) => {
-    setLoadMessage(true);
-    setTimeout(()=>{
-const data = {
-      count: 2,
-      results: [
-        {name: 'fake thing 1', url: 'http://fakethings.com/1'},
-        {name: 'fake thing 2', url: 'http://fakethings.com/2'},
-      ],
-    }
     setData(data);
     setParams(requestParams);
-    setLoadMessage(false);
-  }, 2000)
-  
+    
+// Rendering Components   
   }
     return (
       <React.Fragment>

@@ -32,3 +32,7 @@ Lab 27
 ### Lab 27
 
 ![UML Lab 27](./assets/LAB-27.png)
+
+## Lab 28
+
+![UML Lab 28](./assets/LAB-28-UML.png)
