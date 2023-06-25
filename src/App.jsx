@@ -2,49 +2,86 @@ import React from 'react';
 import './App.scss';
 import axios from 'axios';
 import Header from './Components/Header';
+import History from './Components/History';
 import Footer from './Components/Footer';
 import Form from './Components/Form';
 import Results from './Components/Results';
-import {useState, useEffect} from 'react';
+import { useEffect, useReducer} from 'react';
+import { response } from 'msw';
 
+const initState = {
+  data: null,
+  loadMessage: false,
+  history: [],
+  requestParams:{}
+}
+
+function reducer(state=initState, action){
+  switch(action.type){
+    
+    case 'LOAD': 
+    return {...state, loadMessage: action.payload}
+
+    case 'DATA':
+      return {...state, data: action.payload}
+
+    case 'PARAMS':
+      return {...state, requestParams: action.payload}
+
+    case 'HISTORY':
+      return {...state, history: [...state.history, action.payload]}
+
+      case 'ADD-HISTORY':
+        return {...state, data:state.history[action.payload]}
+    default:
+        return state;
+  }
+}
 
 function App(){
-
-// State
-let [data, setData] = useState(null);
- let [requestParams, setParams] = useState({})
- let [loadMessage, setLoadMessage] = useState(false)
+const [state, dispatch] = useReducer(reducer, initState);
 
 // UseEffect
  useEffect(()=>{
   try{
-     if(requestParams.url && requestParams.method ){
-setLoadMessage(true);
+     if(state.requestParams.url && state.requestParams.method ){
+dispatch({type:'LOAD', payload: true});
  async function getRequestedData(){
-    let response = await axios.get(requestParams.url)
-    setData(response.data)
+    let response = await axios.get(state.requestParams.url)
+    dispatch({type:'DATA', payload: response});
+  dispatch({type: 'HISTORY', payload: {
+    method: state.requestParams.method,
+    url: state.requestParams.url,
+    results: response.data.results,
+  }})
   }
   getRequestedData();
-  setLoadMessage(false);
-  }
+  dispatch({type:'LOAD', payload: false});
 }
-catch{setData('Error No Data');}
-}, [requestParams])
+}
+catch{dispatch({type:'DATA', payload: 'Error No Data'});}
+}, [state.requestParams])
+
 
 // Onsubmit handler
  const callApi = (requestParams) => {
-    setData(data);
-    setParams(requestParams);
-    
+dispatch({type:'PARAMS', payload: requestParams })    
+  };
+
+function showHistory(index){
+dispatch({type:'ADD-HISTORY', payload:index})
+}
+
+
 // Rendering Components   
-  }
-    return (
+  return (
       <React.Fragment>
         <Header />
-        <div>Request Method: {requestParams.method}</div>
-        <div>URL: {requestParams.url}</div>
+        <div>Request Method: {state.requestParams.method}</div>
+        <div>URL: {state.requestParams.url}</div>
         <Form handleApiCall={callApi} />
-        <Results data={data} loadMessage={loadMessage} />
+        <History history={state.history} showHistory={showHistory}/>
+        <Results data={state.data} loadMessage={state.loadMessage} />
         <Footer />
       </React.Fragment>
     );
