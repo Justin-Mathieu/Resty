@@ -1,25 +1,25 @@
-import { useReducer, useState } from "react";
-
-function historyReducer(initialState, action) {
-    switch (action.type) {
-        case 'add':
-            return { ...}
-    }
-}
-
 function History(props) {
-    console.log(props.history);
 
+    const { history, showHistory } = props;
+    console.log(props);
 
     return (
         <>
-
-            <li>{props.history}</li>
+            <ul>
+                {
+                    history.length ?
+                        history.map((item, index) => (
+                            <li key={`History - ${index}`}>
+                                <button onClick={() => { showHistory(index) }}>
+                                    {item.method}: {item.url}
+                                </button>
+                            </li>
+                        ))
+                        : 'zdfafdasfd'
+                }
+            </ul>
         </>
-
     )
-
-
 }
 
 export default History;
